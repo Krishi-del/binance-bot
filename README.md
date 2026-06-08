@@ -1,165 +1,146 @@
 # Binance Futures Testnet Trading Bot
 
-A clean, production-ready CLI trading bot for Binance USDT-M Futures Testnet.  
-Supports **MARKET**, **LIMIT**, and **STOP-LIMIT** orders with strong input validation, structured logging, and a layered architecture.
+A lightweight Python CLI application to place MARKET, LIMIT, and STOP-LIMIT orders on Binance USDT-M Futures Testnet with clean architecture, structured logging, and strong validation.
 
 ---
 
-## Features
+## 🚀 Trading Environment
 
-- Place **MARKET**, **LIMIT**, and **STOP-LIMIT** orders via the CLI
+This bot is designed for Binance USDT-M Futures Testnet.
+
+Base URL:
+https://testnet.binancefuture.com
+
+---
+
+## 📌 Features
+
+### Core Features (Required)
+- Place MARKET orders
+- Place LIMIT orders
 - BUY and SELL support
-- Strong input validation with helpful error messages
-- File-based logging with timestamps, levels, and module names
-- Custom exception hierarchy for clean error handling
-- `.env`-based credential management (no hardcoded secrets)
-- SOLID-aligned project structure (API / service / CLI layers)
+- CLI-based input validation (argparse)
+- Structured logging (file-based logs)
+- Clean layered architecture:
+  - API layer (Binance client)
+  - Service layer (order logic)
+  - CLI layer (user interface)
+- Strong error handling:
+  - Validation errors
+  - API errors
+  - Network failures
+
+### Bonus Feature
+- STOP-LIMIT order support
 
 ---
 
-## Project Structure
+## 🏗 Project Structure
 
-```
-project/
+
+trading_bot/
+│
 ├── main.py
 ├── config.py
 ├── requirements.txt
 ├── .env.example
-├── README.md
 ├── logs/
-│   └── trading_bot.log
+│ └── trading_bot.log
+│
 ├── client/
-│   ├── __init__.py
-│   └── binance_client.py
+│ └── binance_client.py
+│
 ├── services/
-│   ├── __init__.py
-│   └── order_service.py
+│ └── order_service.py
+│
 ├── cli/
-│   ├── __init__.py
-│   └── commands.py
+│ └── commands.py
+│
 └── utils/
-    ├── __init__.py
-    ├── exceptions.py
-    ├── logger.py
-    └── validators.py
-```
+├── exceptions.py
+├── logger.py
+└── validators.py
+
 
 ---
 
-## Installation
+## ⚙️ Installation
 
 ```bash
-git clone https://github.com/Krishi-del/binance-bot
-cd binance_bot
+git clone https://github.com/your-username/binance-bot
+cd binance-bot
+
 python -m venv venv
+
 # Windows
 venv\Scripts\activate
-# macOS / Linux
+
+# Linux / Mac
 source venv/bin/activate
 
 pip install -r requirements.txt
-```
-
----
-
 ## Environment Setup
 
-1. Copy `.env.example` to `.env`:
-```bash
-   cp .env.example .env
-```
-2. Fill in your Binance Testnet credentials:
-```env
-   BINANCE_API_KEY=test
-   BINANCE_API_SECRET=test
-```
-
-## Example Commands
-
-### Market Buy
-```bash
+Create a .env file:
+--mock flag is used when API credentials are not available.
+BINANCE_API_KEY=test
+BINANCE_API_SECRET=test
+##How to Run
+MARKET Order (Required)
 python main.py --symbol BTCUSDT --side BUY --order-type MARKET --quantity 0.001
-```
-
-### Limit Sell
-```bash
+LIMIT Order (Required)
 python main.py --symbol BTCUSDT --side SELL --order-type LIMIT --quantity 0.001 --price 70000
-```
-
-### Stop-Limit Buy
-```bash
+STOP-LIMIT Order (Bonus)
 python main.py --symbol BTCUSDT --side BUY --order-type STOP_LIMIT --quantity 0.001 --stop-price 65000 --price 65100
-```
+##Order Response Format
 
----
+Each successful order returns:
 
-## Example Successful Output
+orderId
+status
+executedQty
+avgPrice (if available)
 
-```
-## Order Summary
+Example:
 
-  Symbol:    BTCUSDT
-  Side:      BUY
-  Type:      LIMIT
-  Quantity:  0.001
-  Price:     50000
-
-## Order Response
-
-  Order ID:     123456789
-  Status:       NEW
-  Executed Qty: 0
-  Avg Price:    0
+Order ID: 123456789
+Status: FILLED
+Executed Qty: 0.001
+Avg Price: 50000
 
 ✓ Order placed successfully
-```
-
-## Example Error Output
-
-```
-✗ Price is required for LIMIT orders.
-```
-
-```
-✗ Binance API error: Binance error -1121: Invalid symbol.
-```
-
----
-
 ## Logging
 
-Logs are written to `logs/trading_bot.log`.
+Logs are stored in:
 
-Format:
-```
-2025-01-01 10:00:00 | INFO | binance_client | Placing BUY LIMIT order | symbol=BTCUSDT qty=0.001
-```
-
-Levels used:
-| Level   | When                                             |
-|---------|--------------------------------------------------|
-| DEBUG   | Full request/response details                    |
-| INFO    | Order placement and successful completion        |
-| WARNING | Validation errors, user input problems           |
-| ERROR   | API errors, auth failures, network issues        |
-
-Console output only shows WARNING and above to keep the CLI clean.
-
----
-
+logs/trading_bot.log
+Log Format
+2026-06-08 18:10:12 | INFO | binance_client | Placing BUY MARKET order | symbol=BTCUSDT qty=0.001
+2026-06-08 18:10:13 | INFO | binance_client | Order successful | orderId=12345 status=FILLED
+Log Levels
+Level	Meaning
+INFO	Order flow events
+DEBUG	API request/response details
+WARNING	Validation issues
+ERROR	API/network failures
+## Sample Logs (Required)
+MARKET Order
+2026-06-08 18:10:12 | INFO | binance_client | Placing BUY MARKET order | symbol=BTCUSDT qty=0.001
+2026-06-08 18:10:13 | INFO | binance_client | Order successful | orderId=101 status=FILLED
+LIMIT Order
+2026-06-08 18:12:40 | INFO | binance_client | Placing SELL LIMIT order | symbol=BTCUSDT qty=0.001 price=70000
+2026-06-08 18:12:41 | INFO | binance_client | Order successful | orderId=102 status=NEW
+## Validation Rules
+symbol → BTCUSDT format only
+side → BUY or SELL
+order-type → MARKET | LIMIT | STOP_LIMIT
+quantity → must be greater than 0
+price → required for LIMIT and STOP-LIMIT
+stop-price → required for STOP-LIMIT
 ## Troubleshooting
-
-| Problem | Solution |
-|---|---|
-| `ConfigurationError: API keys missing` | Ensure `.env` exists with valid keys |
-| `AuthenticationError` | Regenerate keys on the testnet dashboard |
-| `Binance error -1121: Invalid symbol` | Check the symbol format — must match exactly (e.g. `BTCUSDT`) |
-| `NetworkError: timed out` | Check your internet connection or VPN settings |
-| `ValidationError: Price required` | Add `--price` for LIMIT and STOP_LIMIT orders |
-
-## Tech Stack
-
-- Python 3.10+
-- Requests / Binance REST API
-- python-dotenv
-- Logging module
+Issue	Solution
+Missing API keys	Create .env file
+Authentication error	Regenerate testnet API keys
+Invalid symbol	Use BTCUSDT format
+Network timeout	Check internet/VPN
+Price required error	Add --price for LIMIT orders
