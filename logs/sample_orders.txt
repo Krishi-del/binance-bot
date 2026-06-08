@@ -1,0 +1,6 @@
+##MARKET ORDER
+2026-06-08 21:27:42 | INFO | commands | Mode selected | mock=True
+2026-06-08 21:27:42 | INFO | commands | Mock order executed | orderId=999999 status=FILLED
+##LIMIT ORDER
+2026-06-08 21:27:42 | INFO | commands | Mode selected | mock=True
+2026-06-08 21:27:42 | INFO | commands | Mock order executed | orderId=999999 status=NEW

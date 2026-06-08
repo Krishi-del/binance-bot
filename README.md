@@ -112,8 +112,8 @@ Avg Price: 50000
 ## Logging
 
 Logs are stored in:
-
 logs/trading_bot.log
+sample logs in sample_orders.txt
 Log Format
 2026-06-08 18:10:12 | INFO | binance_client | Placing BUY MARKET order | symbol=BTCUSDT qty=0.001
 2026-06-08 18:10:13 | INFO | binance_client | Order successful | orderId=12345 status=FILLED
@@ -123,13 +123,8 @@ INFO	Order flow events
 DEBUG	API request/response details
 WARNING	Validation issues
 ERROR	API/network failures
-## Sample Logs (Required)
-MARKET Order
-2026-06-08 18:10:12 | INFO | binance_client | Placing BUY MARKET order | symbol=BTCUSDT qty=0.001
-2026-06-08 18:10:13 | INFO | binance_client | Order successful | orderId=101 status=FILLED
-LIMIT Order
-2026-06-08 18:12:40 | INFO | binance_client | Placing SELL LIMIT order | symbol=BTCUSDT qty=0.001 price=70000
-2026-06-08 18:12:41 | INFO | binance_client | Order successful | orderId=102 status=NEW
+## Sample Logs 
+Logs included are mock-based executions to ensure reproducibility without API dependency.
 ## Validation Rules
 symbol → BTCUSDT format only
 side → BUY or SELL
